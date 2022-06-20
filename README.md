@@ -7,9 +7,9 @@ Youtube Tutorial here : https://youtu.be/X3KQdwVlo1Q
 Created by https://github.com/easy-tuto
 modified by Diego Sanchez
 
-j'ai suiviu exactement le tutoriel sur youtube
-petits changements :    - string ressources
-                        - changement de couleurs
-                        - divided by zero special case
-                        - switch instead of if.. if.. if
-                        - add 1/x, +/-, sqrt, %
+
+changes :     - @string res
+              - changed colors
+              - divided by zero special case
+              - switch instead of if.. if.. if
+              - add 1/x, +/-, sqrt, %
