@@ -14,10 +14,12 @@ import org.mozilla.javascript.Scriptable;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView resultTv,solutionTv;
-    MaterialButton buttonC,buttonBrackOpen,buttonBrackClose;
+    MaterialButton buttonC, buttonBracketOpen, buttonBracketClose;
     MaterialButton buttonDivide,buttonMultiply,buttonPlus,buttonMinus,buttonEquals;
     MaterialButton button0,button1,button2,button3,button4,button5,button6,button7,button8,button9;
     MaterialButton buttonAC,buttonDot;
+    MaterialButton buttonFraction, buttonSquareRoot, buttonPercentage, buttonPlusMinus;
+    Boolean clickedDot = false;
 
 
     @Override
@@ -28,8 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        solutionTv = findViewById(R.id.solution_tv);
 
        assignId(buttonC,R.id.button_c);
-       assignId(buttonBrackOpen,R.id.button_open_bracket);
-       assignId(buttonBrackClose,R.id.button_close_bracket);
+       assignId(buttonBracketOpen,R.id.button_open_bracket);
+       assignId(buttonBracketClose,R.id.button_close_bracket);
        assignId(buttonDivide,R.id.button_divide);
        assignId(buttonMultiply,R.id.button_multiply);
        assignId(buttonPlus,R.id.button_plus);
@@ -47,7 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        assignId(button9,R.id.button_9);
        assignId(buttonAC,R.id.button_ac);
        assignId(buttonDot,R.id.button_dot);
-
+       assignId(buttonFraction,R.id.button_fraction);
+       assignId(buttonSquareRoot, R.id.button_square_root);
+       assignId(buttonPercentage,R.id.button_percentage);
+       assignId(buttonPlusMinus,R.id.button_plus_minus);
 
 
 
@@ -66,25 +71,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String buttonText = button.getText().toString();
         String dataToCalculate = solutionTv.getText().toString();
 
-        if(buttonText.equals("AC")){
-            solutionTv.setText("");
-            resultTv.setText("0");
-            return;
-        }
-        if(buttonText.equals("=")){
-            solutionTv.setText(resultTv.getText());
-            return;
-        }
-        if(buttonText.equals("C")){
-            dataToCalculate = dataToCalculate.substring(0,dataToCalculate.length()-1);
-        }else{
-            dataToCalculate = dataToCalculate+buttonText;
+        switch (buttonText){
+            case "CE": {
+                solutionTv.setText("");
+                resultTv.setText("0");
+                return;
+            }
+            case "=": {
+                solutionTv.setText(resultTv.getText());
+                return;
+            }
+            case "C": {
+                if (dataToCalculate.length() > 0) {
+                    dataToCalculate = dataToCalculate.substring(0, dataToCalculate.length() - 1);
+                } else {
+                    dataToCalculate = "0";
+                }
+                break;
+            }
+            case "1/x":{
+                dataToCalculate = String.valueOf((1/Double.parseDouble(getResult(dataToCalculate))));
+                break;
+            }
+            case "+/-":{
+                dataToCalculate = String.valueOf(-1*(Double.parseDouble(getResult(dataToCalculate))));
+                break;
+            }
+            case "√":{
+                dataToCalculate = String.valueOf((Math.sqrt(Double.parseDouble(getResult(dataToCalculate)))));
+                break;
+            }
+            case "%":{
+                dataToCalculate = String.valueOf((Double.parseDouble(getResult(dataToCalculate))/100));
+                break;
+            }
+            default: {
+                dataToCalculate = dataToCalculate+buttonText;
+                break;
+            }
         }
         solutionTv.setText(dataToCalculate);
 
-        String finalResult = getResult(dataToCalculate);
 
-        if(!finalResult.equals("Err")){
+        String finalResult = getResult(dataToCalculate);
+        if (finalResult.length()>8) {
+            finalResult = finalResult.substring(0, 8);
+        }
+
+        if(finalResult.equals("Infinity")) {
+            resultTv.setText(R.string.infinityError);
+        }
+        else if(!finalResult.equals("Err")){
             resultTv.setText(finalResult);
         }
 
